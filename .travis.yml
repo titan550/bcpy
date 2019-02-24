@@ -17,4 +17,3 @@ deploy:
     server: https://test.pypi.org/legacy/
     on:
       branch: staging
-      tags: true
