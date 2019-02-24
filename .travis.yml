@@ -3,9 +3,18 @@ sudo: false
 python: 3.6
 script: pytest
 deploy:
-  provider: pypi
-  user: titan_550
-  password:
-    secure: ciw+Y0xRfAGXlE6NdRN+16ZLlh1Cu1l34/Jzhj8vkc24bwc83FgKxWx+O/kVcd2RiHOJVUP4NCHi0EqM8egm6QoXb1Wjxt2xjcx6ipoBgI+mFwa+JNBc2FU1l159X+1a/n9lGhly1eoG7hwfIljrpNfqg7ZIP7lRyGdjtJTheAO7JIqbvBo96h8RzJO5VDHYaqky4mjHQwDE+90ecWb9gITcMtLc9PlXiyNS7aKP00mgSjYIpe3S2wjBoSD2cboKVrKaVdheBxcmh2GSdTvcV2Ykg8HQRXUB3wZZYc9XcmMeRQyELaA3AaCu3aSlTJeC0uKGQI+msAKCttQKyu7tDbCpzNWhu9IeGo2dQ0Tb7gkZY4GudsbRLmMxpz2LLKh9yn9c4cDu5VqfI9MyXtfKvuurunwbJ+vWEzHanFminCjb0Lv15GT9//EGXIlYFiGppmLNwtJjcozuYhGm3tMDZQVFQvBALzPlDumj+sYHxkrJoTxezq8uNfRBPcK89xijdbmjISshnhJgOkUxLb8+OwF+s6WZIStvqPjGMaJZRHCVwNV9mfYgkEe031c5TUrAjWhqfFosvcGf6R7a+iXctFCYWKl7J2ZVmrroo8UTy/45GvHWmMXmlSmaSBoc2P2I0BNTxSyXAPs1MIT6CYF7qPkcyPbYFLR04yNiyoKqiNs=
-  on:
-    branch: master
+  - provider: pypi
+    user: titan_550
+    password:
+      secure: ciw+Y0xRfAGXlE6NdRN+16ZLlh1Cu1l34/Jzhj8vkc24bwc83FgKxWx+O/kVcd2RiHOJVUP4NCHi0EqM8egm6QoXb1Wjxt2xjcx6ipoBgI+mFwa+JNBc2FU1l159X+1a/n9lGhly1eoG7hwfIljrpNfqg7ZIP7lRyGdjtJTheAO7JIqbvBo96h8RzJO5VDHYaqky4mjHQwDE+90ecWb9gITcMtLc9PlXiyNS7aKP00mgSjYIpe3S2wjBoSD2cboKVrKaVdheBxcmh2GSdTvcV2Ykg8HQRXUB3wZZYc9XcmMeRQyELaA3AaCu3aSlTJeC0uKGQI+msAKCttQKyu7tDbCpzNWhu9IeGo2dQ0Tb7gkZY4GudsbRLmMxpz2LLKh9yn9c4cDu5VqfI9MyXtfKvuurunwbJ+vWEzHanFminCjb0Lv15GT9//EGXIlYFiGppmLNwtJjcozuYhGm3tMDZQVFQvBALzPlDumj+sYHxkrJoTxezq8uNfRBPcK89xijdbmjISshnhJgOkUxLb8+OwF+s6WZIStvqPjGMaJZRHCVwNV9mfYgkEe031c5TUrAjWhqfFosvcGf6R7a+iXctFCYWKl7J2ZVmrroo8UTy/45GvHWmMXmlSmaSBoc2P2I0BNTxSyXAPs1MIT6CYF7qPkcyPbYFLR04yNiyoKqiNs=
+    on:
+      branch: master
+      tags: true
+  - provider: pypi
+    user: titan_550
+    password:
+      secure: Dh3dXX7hcp5gF2eC+3bdo9lzv/x0DI+kTs2n6W1Pc4YsateY9EY/47zxnh/HJpRMPKnWFo/G71bxgZC5FHHzrdn6e/QPnTdb33xwVK+BEWh1unF5YaaXocmqSr2Ypg0hV5BL+iUb2HhVS/6aVe3DtkpJPtQ/c/DhqfNSAVdcy1+ZAW+cG+ebsf0HWcillrDXcN9tVCq4hGaXenkB1sxffsmhkpVkIBobrpMvz87SmnkF5APeD2kixBM1m1dmNeQKECjFafWFQ62+4Xt342vVkwDPoc+PLj7vqIzBCD+PIHnWOK1f7i1Fpmy+52aNg6Zm8zhsiwQEtYU+8zPZCNR9Z+CmyUdd8hbRlVwUgzyDIsJjVkbtg2hTlhlSkQNMonAr8PzRtvZ6YSi2uhhEd0oGzeABYHQW+fUsBt2Q9Uz479M9RY5TY2JWC3p4cVhXjR37GHE04hGbmpBMEgmhdq5Z2RDmV71/um+cwezsdapMVUUgOg3zF3i2NnFPdhwpM+BH1Y5O0F5VYM4+2jBvr6QwYcEgdTPtETQTtxAYl5sVI7lGy+/CTzpCH1y+EX7nC6O1LWBHb5XRvJIocatpvfPs5FNf7wHhvJfa4sOHhn51HR7MD3bOYgh8yHLxx640gdfrOyHc/wRyxIOjbLOS0Kw1o/PTMlwjeZBKgzm8H1oeRs8=
+    server: https://test.pypi.org/legacy
+    on:
+      branch: staging
+      tags: true
