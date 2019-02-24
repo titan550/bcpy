@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="bcpy",
-    version="0.0.1",
+    version="0.0.2",
     author="John Shojaei",
     author_email="titan550@gmail.com",
     description="Microsoft SQL Server bcp (Bulk Copy) wrapper",
