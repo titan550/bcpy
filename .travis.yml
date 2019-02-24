@@ -13,8 +13,8 @@ deploy:
   - provider: pypi
     user: titan_550
     password:
-      secure: Dh3dXX7hcp5gF2eC+3bdo9lzv/x0DI+kTs2n6W1Pc4YsateY9EY/47zxnh/HJpRMPKnWFo/G71bxgZC5FHHzrdn6e/QPnTdb33xwVK+BEWh1unF5YaaXocmqSr2Ypg0hV5BL+iUb2HhVS/6aVe3DtkpJPtQ/c/DhqfNSAVdcy1+ZAW+cG+ebsf0HWcillrDXcN9tVCq4hGaXenkB1sxffsmhkpVkIBobrpMvz87SmnkF5APeD2kixBM1m1dmNeQKECjFafWFQ62+4Xt342vVkwDPoc+PLj7vqIzBCD+PIHnWOK1f7i1Fpmy+52aNg6Zm8zhsiwQEtYU+8zPZCNR9Z+CmyUdd8hbRlVwUgzyDIsJjVkbtg2hTlhlSkQNMonAr8PzRtvZ6YSi2uhhEd0oGzeABYHQW+fUsBt2Q9Uz479M9RY5TY2JWC3p4cVhXjR37GHE04hGbmpBMEgmhdq5Z2RDmV71/um+cwezsdapMVUUgOg3zF3i2NnFPdhwpM+BH1Y5O0F5VYM4+2jBvr6QwYcEgdTPtETQTtxAYl5sVI7lGy+/CTzpCH1y+EX7nC6O1LWBHb5XRvJIocatpvfPs5FNf7wHhvJfa4sOHhn51HR7MD3bOYgh8yHLxx640gdfrOyHc/wRyxIOjbLOS0Kw1o/PTMlwjeZBKgzm8H1oeRs8=
-    server: https://test.pypi.org/legacy
+      secure: Ywtu7jajCO1/XPWBg1usKNVnFuzPVnRRKg7MvP/oHRUbcnrFA5b0RGhhuE3OoXesngXEOCXY+S/pUC6Iyaw05oi6l1JUd9HmrdfLE68E+WQgBXMzjtIv4NaXcmWTHlRjgjYhJPmMXdza55CwjqXK3zuidtV1VysKoiWNzPR4jBFP8Y2wsx9ucIvfDMBOYlLkqUp15/ZomG26XWv5Cq0Q+4kD6sAAGZBYAZsZ2O6kKVziRK+/0vca1BrE0IrunaPVJcvvNQxwxavaXlcO/ZUn/VAYZWXts1/VaWw10W2viGU5QwHb0yQCCPJYREpxidIP2dBbPn+5ZyRVJEtJGxTzS2VLW+RNXEG/UUNqtGFjN4U7MP57EF9MewOkWPhTMuJ96j8zlfzjh4/2Xc24gPqK7QJSzwDxjoPVqUqyJj+Chcm2UJ6jC0YDaVUGIvDk/m0MNEPLaYvEb0HT8L5U9K5MtDJ5OUcKI2J5dmJcJkgNrFfwFpp5uAAr5uhIlAV6pzmFvca4h65of6aKskQ20vIWumlhuyCdXeUuql5MVzVy7X9Iv4nGbS3XSx2NJohDiJFHXgrW2GiCW+UwQ+HISntNYYEP2qMx6MinjsQL2lm0SZbXVlvNwt5hc8inT005WARiSE4UV7+1/Sb3tmfLk6LaS24tVpS24RtcbRmRINrWnA8=
+    server: https://test.pypi.org/legacy/
     on:
       branch: staging
       tags: true
