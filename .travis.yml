@@ -1,5 +1,11 @@
+language: python
+sudo: false
+python: 3.7
+
 deploy:
   provider: pypi
   user: titan_550
   password:
     secure: ciw+Y0xRfAGXlE6NdRN+16ZLlh1Cu1l34/Jzhj8vkc24bwc83FgKxWx+O/kVcd2RiHOJVUP4NCHi0EqM8egm6QoXb1Wjxt2xjcx6ipoBgI+mFwa+JNBc2FU1l159X+1a/n9lGhly1eoG7hwfIljrpNfqg7ZIP7lRyGdjtJTheAO7JIqbvBo96h8RzJO5VDHYaqky4mjHQwDE+90ecWb9gITcMtLc9PlXiyNS7aKP00mgSjYIpe3S2wjBoSD2cboKVrKaVdheBxcmh2GSdTvcV2Ykg8HQRXUB3wZZYc9XcmMeRQyELaA3AaCu3aSlTJeC0uKGQI+msAKCttQKyu7tDbCpzNWhu9IeGo2dQ0Tb7gkZY4GudsbRLmMxpz2LLKh9yn9c4cDu5VqfI9MyXtfKvuurunwbJ+vWEzHanFminCjb0Lv15GT9//EGXIlYFiGppmLNwtJjcozuYhGm3tMDZQVFQvBALzPlDumj+sYHxkrJoTxezq8uNfRBPcK89xijdbmjISshnhJgOkUxLb8+OwF+s6WZIStvqPjGMaJZRHCVwNV9mfYgkEe031c5TUrAjWhqfFosvcGf6R7a+iXctFCYWKl7J2ZVmrroo8UTy/45GvHWmMXmlSmaSBoc2P2I0BNTxSyXAPs1MIT6CYF7qPkcyPbYFLR04yNiyoKqiNs=
+  on:
+    branch: master
