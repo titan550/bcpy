@@ -8,12 +8,6 @@
     <img src="https://img.shields.io/pypi/v/bcpy.svg" alt="latest release" />
     </a>
   </td>
-<tr>
-  <td>Package Status</td>
-  <td>
-		<a href="https://pypi.org/project/bcpy">
-		<img src="https://img.shields.io/pypi/status/bcpy.svg" alt="status" /></td>
-		</a>
 </tr>
 <tr>
   <td>License</td>
@@ -26,7 +20,7 @@
 <tr>
   <td>Build Status</td>
   <td>
-    <a href="https://travis-ci.org/pandas-dev/pandas">
+    <a href="https://travis-ci.org/titan550/bcpy">
     <img src="https://img.shields.io/travis/titan550/bcpy.svg" alt="travis build status" />
     </a>
   </td>
