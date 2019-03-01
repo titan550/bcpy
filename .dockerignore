@@ -1,0 +1,5 @@
+*
+!dist/*.whl
+!/tests
+!requirements.txt
+__pycache__
