@@ -13,6 +13,9 @@ test: ## Tests the package by running a SQL Server container and running the tes
 			docker stop bcpy_test_mssql_server || true && docker rm bcpy-mssq-test || true
 			docker run --rm --name 'bcpy_test_mssql_server' -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(TEST_MSSQL_SA_PASSWORD)' -p $(TEST_MSSQL_PORT):1433 -d mcr.microsoft.com/mssql/server:2017-latest
 			docker rmi $(docker images |grep 'bcpy_test_py_client') || true
+			python3 -m pip install --user --upgrade setuptools wheel
+			rm -rf dist build bcpy.egg-info
+			python3 setup.py sdist bdist_wheel
 			docker build --force-rm -t bcpy_test_py_client -f ./tests/Dockerfile .
 			docker run --rm bcpy_test_py_client
 			docker stop bcpy_test_mssql_server
