@@ -7,7 +7,7 @@ before_script:
   - mv sample.env .env
 script: make test
 before_deploy:
-  - test $TRAVIS_BRANCH == "staging" && sed -i '/version=*/c\    version=\"'"$version"'\",' setup.py
+  - test $TRAVIS_BRANCH == "staging" && sed -i '/version=*/c\    version=\"'"$(date +%Y%m%d%H%M%S)"'\",' setup.py
 deploy:
   - provider: pypi
     user: titan_550
