@@ -1,9 +1,5 @@
 services:
   - docker
-addons:
-  apt:
-    - python3
-    - python3-pip
 sudo: false
 language: python
 python: 3.6
