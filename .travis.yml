@@ -6,8 +6,11 @@ python: 3.6
 before_install:
   - test $TRAVIS_BRANCH == "staging" && sed -i '/version=*/c\    version=\"'"$(date +%Y%m%d%H%M%S)"'\",' setup.py
 before_script:
-  - mv sample.env .env
+  - cp sample.env .env
 script: make test
+before_deploy:
+  - rm -rf .env
+  - git update-index --assume-unchanged setup.py
 deploy:
   - provider: pypi
     user: titan_550
