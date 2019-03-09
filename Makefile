@@ -12,7 +12,7 @@ help: ## This help.
 test: ## Tests the package by running a SQL Server container and running the test cases
 			docker stop bcpy_test_mssql_server || true && docker rm bcpy-mssq-test || true
 			docker run --rm --name 'bcpy_test_mssql_server' -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(TEST_MSSQL_SA_PASSWORD)' -p $(TEST_MSSQL_PORT):1433 -d mcr.microsoft.com/mssql/server:2017-latest
-			docker images | grep "bcpy_test_py_client" | awk '{print $1 ":" $2}' | xargs --no-run-if-empty docker rmi
+			docker image rm bcpy_test_py_client || true
 			python3 -m pip install --upgrade setuptools wheel
 			rm -rf dist build bcpy.egg-info
 			python3 setup.py sdist bdist_wheel
@@ -20,3 +20,6 @@ test: ## Tests the package by running a SQL Server container and running the tes
 			docker run --rm bcpy_test_py_client
 			docker stop bcpy_test_mssql_server
 			rm -rf dist build bcpy.egg-info
+
+test2:
+			docker images | grep "bcpy_test_py_client"
