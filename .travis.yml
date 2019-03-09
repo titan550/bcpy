@@ -3,9 +3,12 @@ services:
 sudo: false
 language: bash
 python: 3.6
-before_install:
+before_script:
   - mv sample.env .env
+  - python3 -m pip || wget https://bootstrap.pypa.io/get-pip.py | python3
 script: make test
+before_deploy:
+  - test $TRAVIS_BRANCH == "staging" && sed -i '/version=*/c\    version=\"'"$version"'\",' setup.py
 deploy:
   - provider: pypi
     user: titan_550
