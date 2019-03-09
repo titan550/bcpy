@@ -19,3 +19,4 @@ test: ## Tests the package by running a SQL Server container and running the tes
 			docker build --force-rm -t bcpy_test_py_client -f ./tests/Dockerfile .
 			docker run --rm bcpy_test_py_client
 			docker stop bcpy_test_mssql_server
+			rm -rf dist build bcpy.egg-info
