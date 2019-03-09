@@ -2,4 +2,3 @@ pytest
 pyodbc
 pandas
 numpy
-setuptools
