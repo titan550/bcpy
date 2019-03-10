@@ -1,8 +1,8 @@
 import os
 import pandas as pd
-import random
-import string
+import random, string
 import tempfile
+from .format_file_builder import FormatFile
 
 name = "bcpy"
 
@@ -24,14 +24,17 @@ def _get_tmp_dir():
     return tmp_file_path
 
 
-def _build_format_file(input):
-    # TODO build format file
-    pass
-
-
-def _bcp(csv_file_path, format_file_path, sql_info):
+def _bcp(csv_file_path, formaet_file_path, sql_info):
     # TODO call shell comamnd bcp
     pass
+
+
+def _build_format_file(input):
+    xml_format_file_content = FormatFile.build_format_file(input)
+    format_file_path = os.path.join(_get_tmp_dir(), ''.join(random.choices(string.ascii_letters + string.digits, k=21)))
+    with open(format_file_path, 'w') as f:
+        f.write(xml_format_file_content)
+    return format_file_path
 
 
 def to_sql(input, sql_info):
@@ -39,4 +42,4 @@ def to_sql(input, sql_info):
     format_file_path = _build_format_file(input)
     _bcp(csv_file_path, format_file_path, sql_info)
     os.remove(csv_file_path)
-    #os.remove(format_file_path)
+    os.remove(format_file_path)
