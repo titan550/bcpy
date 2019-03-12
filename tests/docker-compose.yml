@@ -1,0 +1,9 @@
+version: 3
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    ports:
+      - "1433:1433" # TODO make the port dynamic with the port number from environment variables
+
+  client:
+    build: . # TODO research how to run docker-compose from Travis and run pytest
