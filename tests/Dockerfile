@@ -13,7 +13,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && ACCEPT_EULA=Y apt-get install -y mssql-tools \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
     && /bin/bash -c "source ~/.bashrc" \
-    && apt-get install -y unixodbc unixodbc-dev \
+    && apt-get install -y unixodbc-dev libssl1.0.0 \
     && rm -rf /var/lib/apt/lists/*
 
 # python 3 libraries
