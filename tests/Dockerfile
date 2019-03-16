@@ -34,9 +34,9 @@ RUN mkdir /bcpy
 
 WORKDIR /bcpy
 
+COPY ./requirements.txt ./requirements.txt
+RUN pip install -r requirements.txt
+
 COPY ./ ./
 
-RUN pip install -r requirements.txt \
-    && pip install --no-index --find-links=./dist ./dist/*
-
-CMD [ "pytest", "-v" ]
+RUN pip install .
