@@ -1,9 +1,30 @@
-version: 3
+version: '3'
 services:
   mssql:
     image: mcr.microsoft.com/mssql/server:2017-latest
-    ports:
-      - "1433:1433" # TODO make the port dynamic with the port number from environment variables
-
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${TEST_MSSQL_SA_PASSWORD}
+    logging: 
+      driver: 'none'
+    ports: 
+      - "${TEST_MSSQL_PORT}:1433"
+    expose: 
+      - "1433"
+    networks:
+      - test-net
   client:
-    build: . # TODO research how to run docker-compose from Travis and run pytest
+    build:
+      context: ..
+      dockerfile: tests/Dockerfile
+    command: pytest -v
+    environment: 
+      TEST_MSSQL_PORT: ${TEST_MSSQL_PORT}
+      TEST_MSSQL_SA_PASSWORD: ${TEST_MSSQL_SA_PASSWORD}
+    depends_on:
+      - mssql
+    networks: 
+      - test-net
+networks:
+  test-net:
+    driver: 'bridge'
