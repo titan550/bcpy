@@ -13,7 +13,6 @@ test: ## Test using docker-compose
 	docker-compose -f tests/docker-compose.yml up --exit-code-from client --build
 
 dev: build ## Starts a shell in the client environment
-	echo "$(shell pwd):/bcpy"
 	docker-compose -f tests/docker-compose.yml run --rm -v "$(shell pwd):/bcpy" client bash || true
 	docker-compose -f tests/docker-compose.yml down
 
