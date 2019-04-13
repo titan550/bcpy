@@ -9,7 +9,7 @@ name = "bcpy"
 
 def _to_csv(input):
     csv_file_name = os.path.join(_get_tmp_dir(), ''.join(random.choices(string.ascii_letters + string.digits, k=21)))
-    if type(input) == pd.DataFrame:
+    if isinstance(input, pd.DataFrame):
         input.to_csv(csv_file_name)
     else:
         raise NotImplementedError
