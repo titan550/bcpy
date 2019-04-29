@@ -1,23 +1,25 @@
-use bcpy_test_db;
-go
-drop table if exists [dbo].[test_bcp];
+use bcpy;
 go
 
+drop table if exists [dbo].[test_dataframe];
+go
 
-create table [dbo].[test_bcp]
+create table [dbo].[test_dataframe]
 (
-  col1 nvarchar(max),
-  col2 nvarchar(max)
-);
+    A nvarchar(max),
+    B nvarchar(max),
+    C nvarchar(max),
+    D nvarchar(max)
+)
 go
 
+drop table if exists [dbo].[test_data1];
+go
 
-insert into [dbo].[test_bcp] (col1, col2)
-values (1, 'A');
-go
-insert into [dbo].[test_bcp] (col1, col2)
-values (2, 'B');
-go
-insert into [dbo].[test_bcp] (col1, col2)
-values (3, 'C');
+create table [dbo].[test_data1]
+(
+    col0 nvarchar(max),
+    col1 nvarchar(max),
+    col2 nvarchar(max)
+)
 go
