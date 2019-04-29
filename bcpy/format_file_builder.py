@@ -1,6 +1,3 @@
-from .dict2xml import dict2xml
-
-
 class FormatFile(object):
     @classmethod
     def _get_field_terminators(cls, flat_file):
