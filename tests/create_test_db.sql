@@ -1,7 +1,7 @@
 USE master;
 GO
-IF DB_ID (N'bcpy_test_db') IS NOT NULL
-DROP DATABASE bcpy_test_db;
+IF DB_ID (N'bcpy') IS NOT NULL
+DROP DATABASE bcpy;
 GO
-CREATE DATABASE bcpy_test_db;
+CREATE DATABASE bcpy;
 GO
