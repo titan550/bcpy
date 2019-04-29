@@ -16,6 +16,8 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && apt-get install -y unixodbc-dev libssl1.0.0 \
     && rm -rf /var/lib/apt/lists/*
 
+ENV PATH="/opt/mssql-tools/bin:${PATH}"
+
 # Python 3 libraries
 RUN apt-get update \
     && apt-get install -y python3-pip python3-dev \
