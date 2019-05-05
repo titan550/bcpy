@@ -4,6 +4,13 @@ from io import StringIO
 
 
 def bcp(sql_table, flat_file):
+    """Runs the bcp command to transfer the input flat file to the input
+    SQL Server table.
+    :param sql_table: The destination Sql Server table
+    :type sql_table: SqlTable
+    :param flat_file: Source flat file
+    :type flat_file: FlatFile
+    """
     if sql_table.with_krb_auth:
         auth = ['-T']
     else:
@@ -21,6 +28,24 @@ def bcp(sql_table, flat_file):
 
 
 def sqlcmd(server, database, command, username=None, password=None):
+    """Runs the input command against the database and returns the output if it
+     is a table.
+    Leave username and password to None if you intend to use
+    Kerberos integrated authentication
+    :param server: SQL Server
+    :type server: str
+    :param database: Name of the default database for the script
+    :type database: str
+    :param command: SQL command to be executed against the server
+    :type command: str
+    :param username: Username to use for login
+    :type username: str
+    :param password: Password to use for login
+    :type password: str
+    :return: Returns a table if the command has an output. Returns None
+             if the output does not return anything.
+    :rtype: Pandas.DataFrame
+    """
     if not username or not password:
         auth = ['-T']
     else:
