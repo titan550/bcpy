@@ -22,7 +22,7 @@ class DataObject:
 
 
 class FlatFile(DataObject):
-    def __init__(self, config=dict(), **kwargs):
+    def __init__(self, config=None, **kwargs):
         super().__init__(config)
         self.delimiter = ','
         self.qualifier = '\''
@@ -31,12 +31,13 @@ class FlatFile(DataObject):
         self.path = None
         self.__format_file_path = None
         self.file_has_header_line = False
+        if config:
         for key, value in config.items():
             setattr(self, key, value)
         for key, value in kwargs.items():
             setattr(self, key, value)
-        if not self.columns and self.path:
-            self._read_columns_from_file()
+        if not self.qualifier:
+            self.qualifier = ''
 
     def __del__(self):
         if self.__format_file_path:
