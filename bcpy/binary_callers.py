@@ -6,8 +6,11 @@ def bcp(sql_table, flat_file):
         auth = ['-T']
     else:
         auth = ['-U', sql_table.username, '-P', sql_table.password]
-    full_table_string = f'{sql_table.database}.{sql_table.schema}.{sql_table.table}'
-    bcp_command = ['bcp', full_table_string, 'IN', flat_file.path, '-f', flat_file.get_format_file_path(), '-S', sql_table.server] + auth
+    full_table_string = \
+        f'{sql_table.database}.{sql_table.schema}.{sql_table.table}'
+    bcp_command = ['bcp', full_table_string, 'IN', flat_file.path, '-f',
+                   flat_file.get_format_file_path(), '-S',
+                   sql_table.server] + auth
     if flat_file.file_has_header_line:
         bcp_command += ['-F', '2']
     result = subprocess.run(bcp_command)
