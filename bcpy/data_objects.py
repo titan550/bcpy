@@ -29,10 +29,12 @@ class FlatFile(DataObject):
         :param config: A dictionary object with the parameters.
         :param kwargs: Dynamic list of params which supersedes config params if
                        they overlap.
-        :param delimiter: flat file delimiter
+        :param delimiter: flat file delimiter (default: ",")
         :param qualifier: flat file qualifier
-                          (e.g., 'col1','col2', qualifier="'")
+                          (default: "'" , e.g., 'col1','col2')
+
         :param newline: newline characters that separate records
+                        (default: "\n")
         :param path: path to the flat file
         :param file_has_header_line: defaults to False
         :param columns: a list of columns, automatically read from the file
