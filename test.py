@@ -1,10 +1,10 @@
 # coding: utf-8
-import bcpy
 import os
 
+import bcpy
 
 c = bcpy.FlatFile(qualifier='', path='tests/data1.csv')
-sql = sql = bcpy.SqlTable({
+sql = bcpy.SqlTable({
     'server': 'mssql',
     'database': 'bcpy',
     'table': 'test_data1',
