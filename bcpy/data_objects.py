@@ -80,7 +80,23 @@ class FlatFile(DataObject):
             format_file_path = f.name
         return format_file_path
 
+    def _get_sql_create_statement(self, table_name=None):
+        if not table_name:
+            table_name = os.path.basename(self.path)
+        sql_cols = ','.join(
+            map(lambda x: f'[{x}] nvarchar(max)', self.columns))
+        sql_command = f"if object_id('[dbo].[{table_name}]', 'U') " \
+            f"is not null drop table [dbo].[{table_name}];" \
+            f'create table [dbo].[{table_name}] ({sql_cols});'
+        return sql_command
+
     def to_sql(self, sql_table):
+        sqlcmd(
+            server=sql_table.server,
+            database=sql_table.database,
+            command=self._get_sql_create_statement(table_name=sql_table.table),
+            username=sql_table.username,
+            password=sql_table.password)
         bcp(sql_table, self)
 
     @property
