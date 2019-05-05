@@ -7,6 +7,8 @@ from .tmp_file import TemporaryFile
 
 
 class DataObject:
+    """Base object for data objects in bcpy
+    """
     def __init__(self, config):
         if config and not isinstance(config, dict):
             raise TypeError('Config parameter must be a dictionary object')
@@ -23,6 +25,19 @@ class DataObject:
 
 class FlatFile(DataObject):
     def __init__(self, config=None, **kwargs):
+        """
+        :param config: A dictionary object with the parameters.
+        :param kwargs: Dynamic list of params which supersedes config params if
+                       they overlap.
+        :param delimiter: flat file delimiter
+        :param qualifier: flat file qualifier
+                          (e.g., 'col1','col2', qualifier="'")
+        :param newline: newline characters that separate records
+        :param path: path to the flat file
+        :param file_has_header_line: defaults to False
+        :param columns: a list of columns, automatically read from the file
+                        if the if the file has header a line.
+        """
         super().__init__(config)
         self.delimiter = ','
         self.qualifier = '\''
@@ -40,6 +55,8 @@ class FlatFile(DataObject):
             self.qualifier = ''
 
     def __del__(self):
+        """Removes the temporary format file that gets created before sending
+        the flat file to SQL Server"""
         try:
             if self.__format_file_path:
                 os.remove(self.__format_file_path)
@@ -47,6 +64,11 @@ class FlatFile(DataObject):
             pass
 
     def _read_columns_from_file(self):
+        """Reads columns of a flat file from its file located in object's path
+        attribute. Is stores the results in the object's columns attribute.
+
+        Note: Caller of this method assumes that the file has headers.
+        """
         with open(self.path) as f:
             header = f.readline()
         qualifier_delimiter_combo = str.format('{0}{1}{0}', self.qualifier,
@@ -59,6 +81,13 @@ class FlatFile(DataObject):
         self.file_has_header_line = True
 
     def get_format_file_path(self, recalculate=False):
+        """Returns the path to the bcp format file of the this flat file
+        :param recalculate: uses file from cache if recalculate if False
+                            otherwise it will remove the old file and creates a
+                            new one.
+        :return: path to the format file
+        :rtype: str
+        """
         if not recalculate and self.__format_file_path:
             return self.__format_file_path
         else:
@@ -74,6 +103,10 @@ class FlatFile(DataObject):
         return self.__format_file_path
 
     def _build_format_file(self):
+        """Creates the format file and writes its content to a temporary file.
+        :return: path to the temporary file
+        :rtype: str
+        """
         format_file_content = FormatFile.build_format_file(self)
         with TemporaryFile(mode='w') as f:
             f.write(format_file_content)
@@ -81,6 +114,13 @@ class FlatFile(DataObject):
         return format_file_path
 
     def _get_sql_create_statement(self, table_name=None):
+        """Creates a SQL drop and re-create statement corresponding to the
+        columns list of the object.
+
+        :param table_name: name of the new table
+        :type table_name: str
+        :return: SQL code to create the table
+        """
         if not table_name:
             table_name = os.path.basename(self.path)
         sql_cols = ','.join(
@@ -91,6 +131,10 @@ class FlatFile(DataObject):
         return sql_command
 
     def to_sql(self, sql_table):
+        """Sends the object to SQL table
+        :param sql_table: destination SQL table
+        :type sql_table: SqlTable
+        """
         sqlcmd(
             server=sql_table.server,
             database=sql_table.database,
@@ -115,6 +159,16 @@ class FlatFile(DataObject):
 
 class SqlServer(DataObject):
     def __init__(self, config=None, **kwargs):
+        """Leave the username and password to None to use Kerberos
+        integrated authentication
+        :param config: A dictionary object with the parameters.
+        :param kwargs: Dynamic list of params which supersedes config params if
+                       they overlap.
+        :param database: default database to use for operations
+        :param server: server name
+        :param username: username for SQL login (default: None)
+        :param password: password for SQL login (default: None)
+        """
         # todo: make Sql Server one of the attributes of SqlTable
         super().__init__(config)
         self.database = 'master'
@@ -129,6 +183,10 @@ class SqlServer(DataObject):
 
     @property
     def with_krb_auth(self):
+        """Returns True if the object uses Kerberos for authentication.
+        :return: Kerberos authentication eligibility
+        :rtype: bool
+        """
         if hasattr(self, 'username') and hasattr(self, 'password'):
             result = False
         else:
@@ -136,6 +194,14 @@ class SqlServer(DataObject):
         return result
 
     def run(self, command):
+        """Runs the input command against the database and returns the
+        result (if any).
+        :param command: SQL statement to run.
+        :type command: str
+        :return: Table of results or None if the command does not return
+        results
+        :rtype: pandas.DataFrame
+        """
         return sqlcmd(
             server=self.server,
             database=self.database,
@@ -146,6 +212,17 @@ class SqlServer(DataObject):
 
 class SqlTable(DataObject):
     def __init__(self, config=None, **kwargs):
+        """Leave the username and password to None to use Kerberos
+        integrated authentication
+        :param config: A dictionary object with the parameters.
+        :param kwargs: Dynamic list of params which supersedes config params if
+                       they overlap.
+        :param database: default database to use for operations
+        :param server: server name
+        :param table: name of the SQL Server table
+        :param username: username for SQL login (default: None)
+        :param password: password for SQL login (default: None)
+        """
         super().__init__(config)
         self.schema = 'dbo'
         required_args = {'server', 'database', 'table'}
@@ -161,6 +238,10 @@ class SqlTable(DataObject):
 
     @property
     def with_krb_auth(self):
+        """Returns True if the object uses Kerberos for authentication.
+        :return: Kerberos authentication eligibility
+        :rtype: bool
+        """
         if hasattr(self, 'username') and hasattr(self, 'password'):
             result = False
         else:
@@ -169,17 +250,32 @@ class SqlTable(DataObject):
 
 
 class DataFrame(DataObject):
+    """Wrapper for pandas.DataFrame objects
+    """
     def __init__(self, df):
+        """
+        :param df: DataFrame object
+        :type df: pandas.DataFrame
+        """
         super().__init__(dict())
         self._df = df
         self._csv_file_path = None
         self._flat_file_object = None
 
     def __del__(self):
+        """Removes the intermediary CSV file that gets created before sending
+        the object to SQL Server"""
         if self._csv_file_path:
             os.remove(self._csv_file_path)
 
     def to_sql(self, sql_table, index=False):
+        """Sends the object to SQL Server.
+        :param sql_table: destination SQL Server table
+        :type sql_table: SqlTable
+        :param index: Specifies whether to send the index of
+        the DataFrame or not
+        :type index: bool
+        """
         delimiter = ','
         qualifier = '"'
         newline = '\n'

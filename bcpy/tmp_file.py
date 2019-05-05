@@ -18,6 +18,10 @@ class TemporaryFile(object):
 
     @staticmethod
     def _get_tmp_dir():
+        """
+        :return: The optimum temporary directory based on OS and environment
+        :rtype: str
+        """
         if sys.platform == 'linux':
             try:
                 tmp_dir = os.environ['XDG_RUNTIME_DIR']
@@ -31,6 +35,10 @@ class TemporaryFile(object):
 
     @classmethod
     def get_tmp_file(cls):
+        """Returns full path to a temporary file without creating it.
+        :return: Full path to a temporary file
+        :rtype: str
+        """
         tmp_dir = cls._get_tmp_dir()
         file_path = os.path.join(tmp_dir, ''.join(
             random.choices(string.ascii_letters + string.digits, k=21)))
