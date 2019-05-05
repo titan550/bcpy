@@ -1,6 +1,8 @@
-import sys, os
+import os
+import random
+import string
+import sys
 import tempfile
-import random, string
 
 
 class TemporaryFile(object):
@@ -30,5 +32,6 @@ class TemporaryFile(object):
     @classmethod
     def get_tmp_file(cls):
         tmp_dir = cls._get_tmp_dir()
-        file_path = os.path.join(tmp_dir, ''.join(random.choices(string.ascii_letters + string.digits, k=21)))
+        file_path = os.path.join(tmp_dir, ''.join(
+            random.choices(string.ascii_letters + string.digits, k=21)))
         return file_path
