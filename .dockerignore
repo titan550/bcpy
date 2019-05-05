@@ -1,5 +1,8 @@
-*
-!dist/*.whl
-!/tests
-!requirements.txt
 __pycache__
+/tests/__pycache__
+.dockerignore
+Dockerfile
+*.pyc
+*.pyo
+*.pyd
+.git

@@ -1,0 +1,31 @@
+version: '3'
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment: 
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+    logging: 
+      driver: 'none'
+    ports: 
+      - "${MSSQL_PORT}:1433"
+    expose: 
+      - "1433"
+    networks:
+      - test-net
+  client:
+    image: bcpy_client
+    build:
+      context: ..
+      dockerfile: tests/Dockerfile
+    command: ["tests/wait-for-it.sh", "mssql:1433", "--", "tests/test.sh"]
+    environment:
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+
+    depends_on:
+      - mssql
+    networks: 
+      - test-net
+networks:
+  test-net:
+    driver: 'bridge'
