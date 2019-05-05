@@ -114,12 +114,15 @@ class FlatFile(DataObject):
 
 
 class SqlTable(DataObject):
-    def __init__(self, config=dict(), **kwargs):
+    def __init__(self, config=None, **kwargs):
         super().__init__(config)
         self.schema = 'dbo'
-        required_args = ['server', 'database', 'table']
-        if not all(k in kwargs for k in required_args) and not all(k in config for k in required_args):
-            raise ValueError(f'Missing arguments in kwargs and config. Need {required_args}')
+        required_args = {'server', 'database', 'table'}
+        if not required_args.issubset(set(kwargs.keys()) | set(config.keys())):
+            raise ValueError(
+                f'Missing arguments in kwargs and config. '
+                f'Need {required_args}')
+        if config:
         for key, value in config.items():
             setattr(self, key, value)
         for key, value in kwargs.items():
