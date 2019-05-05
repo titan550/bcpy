@@ -1,0 +1,7 @@
+USE master;
+GO
+IF DB_ID (N'bcpy') IS NOT NULL
+DROP DATABASE bcpy;
+GO
+CREATE DATABASE bcpy;
+GO

@@ -1,0 +1,1 @@
+If you choose to tag commits for deployment, commit message should be like "$TRAVIS_TAG=0.0.5"

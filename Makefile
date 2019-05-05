@@ -9,14 +9,12 @@ help: ## This help.
 
 .DEFAULT_GOAL := help
 
-test: ## Tests the package by running a SQL Server container and running the test cases
-			docker stop bcpy_test_mssql_server || true && docker rm bcpy-mssq-test || true
-			docker run --rm --name 'bcpy_test_mssql_server' -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=$(TEST_MSSQL_SA_PASSWORD)' -p $(TEST_MSSQL_PORT):1433 -d mcr.microsoft.com/mssql/server:2017-latest
-			docker images | grep "bcpy_test_py_client" | awk '{print $1 ":" $2}' | xargs --no-run-if-empty docker rmi
-			python3 -m pip install --upgrade setuptools wheel
-			rm -rf dist build bcpy.egg-info
-			python3 setup.py sdist bdist_wheel
-			docker build --force-rm -t bcpy_test_py_client -f ./tests/Dockerfile .
-			docker run --rm bcpy_test_py_client
-			docker stop bcpy_test_mssql_server
-			rm -rf dist build bcpy.egg-info
+test: ## Test using docker-compose
+	docker-compose -f tests/docker-compose.yml up --exit-code-from client --build
+
+dev: build ## Starts a shell in the client environment
+	docker-compose -f tests/docker-compose.yml run --rm -v "$(shell pwd):/bcpy" client bash || true
+	docker-compose -f tests/docker-compose.yml down
+
+build: ## builds docker images in the docker-compose file
+	docker build --force-rm -t bcpy_client -f ./tests/Dockerfile .

@@ -4,7 +4,7 @@ sudo: false
 language: python
 python: 3.6
 before_install:
-  - test $TRAVIS_BRANCH == "staging" && sed -i '/version=*/c\    version=\"'"$(date +%Y.%m.%d.%H.%M.%S)"'\",' setup.py
+  - if [ $TRAVIS_BRANCH == "staging" ]; then sed -i '/version=*/c\    version=\"'"$(date +%Y.%m.%d.%H.%M.%S)"'\",' setup.py; fi
 before_script:
   - cp sample.env .env
 script: make test
