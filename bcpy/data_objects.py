@@ -32,8 +32,8 @@ class FlatFile(DataObject):
         self.__format_file_path = None
         self.file_has_header_line = False
         if config:
-        for key, value in config.items():
-            setattr(self, key, value)
+            for key, value in config.items():
+                setattr(self, key, value)
         for key, value in kwargs.items():
             setattr(self, key, value)
         if not self.qualifier:
@@ -41,8 +41,8 @@ class FlatFile(DataObject):
 
     def __del__(self):
         try:
-        if self.__format_file_path:
-            os.remove(self.__format_file_path)
+            if self.__format_file_path:
+                os.remove(self.__format_file_path)
         except AttributeError:
             pass
 
@@ -113,6 +113,37 @@ class FlatFile(DataObject):
             raise TypeError('Columns parameter must be a list of columns')
 
 
+class SqlServer(DataObject):
+    def __init__(self, config=None, **kwargs):
+        # todo: make Sql Server one of the attributes of SqlTable
+        super().__init__(config)
+        self.database = 'master'
+        self.server = 'localhost'
+        self.username = None
+        self.password = None
+        if config:
+            for key, value in config.items():
+                setattr(self, key, value)
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    @property
+    def with_krb_auth(self):
+        if hasattr(self, 'username') and hasattr(self, 'password'):
+            result = False
+        else:
+            result = True
+        return result
+
+    def run(self, command):
+        return sqlcmd(
+            server=self.server,
+            database=self.database,
+            command=command,
+            username=self.username,
+            password=self.password)
+
+
 class SqlTable(DataObject):
     def __init__(self, config=None, **kwargs):
         super().__init__(config)
@@ -123,8 +154,8 @@ class SqlTable(DataObject):
                 f'Missing arguments in kwargs and config. '
                 f'Need {required_args}')
         if config:
-        for key, value in config.items():
-            setattr(self, key, value)
+            for key, value in config.items():
+                setattr(self, key, value)
         for key, value in kwargs.items():
             setattr(self, key, value)
 
