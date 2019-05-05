@@ -1,8 +1,9 @@
+import csv
+import os
+
+from .binary_callers import bcp, sqlcmd
 from .format_file_builder import FormatFile
 from .tmp_file import TemporaryFile
-import os
-from .binary_callers import bcp
-import csv
 
 
 class DataObject:
