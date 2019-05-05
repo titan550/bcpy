@@ -7,8 +7,13 @@ class FormatFile(object):
         newline = cls._scaper(flat_file.newline)
         if flat_file.qualifier:
             terminators.append(qualifier)
-        qualifier_delimiter_combo = str.format('{0}{1}{0}', qualifier, delimiter)
-        terminators.extend([qualifier_delimiter_combo for i in range(len(flat_file.columns) - 1)])
+        qualifier_delimiter_combo = str.format(
+            '{0}{1}{0}',
+            qualifier,
+            delimiter)
+        terminators.extend(
+            [qualifier_delimiter_combo
+             for _ in range(len(flat_file.columns) - 1)])
         terminators.append(qualifier + newline)
         return terminators
 
