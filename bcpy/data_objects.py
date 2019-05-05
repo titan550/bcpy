@@ -49,9 +49,13 @@ class FlatFile(DataObject):
     def _read_columns_from_file(self):
         with open(self.path) as f:
             header = f.readline()
-        qualifier_delimiter_combo = str.format('{0}{1}{0}', self.qualifier, self.delimiter)
-        self.columns = [col for col in header.rstrip(self.newline).split(qualifier_delimiter_combo)]
-        self.columns[0] = self.columns[0].lstrip(self.qualifier)
+        qualifier_delimiter_combo = str.format('{0}{1}{0}', self.qualifier,
+                                               self.delimiter)
+        columns_raw = header.split(qualifier_delimiter_combo)
+        self.__columns = [columns_raw[0].lstrip(self.qualifier)]
+        self.__columns.extend(columns_raw[1:-1])
+        self.__columns.append(
+            columns_raw[-1].rstrip(self.qualifier + self.newline))
         self.file_has_header_line = True
 
     def get_format_file_path(self, recalculate=False):
