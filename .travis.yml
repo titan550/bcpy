@@ -1,7 +1,16 @@
-language: python
+services:
+  - docker
 sudo: false
+language: python
 python: 3.6
-script: pytest
+before_install:
+  - if [ $TRAVIS_BRANCH == "staging" ]; then sed -i '/version=*/c\    version=\"'"$(date +%Y.%m.%d.%H.%M.%S)"'\",' setup.py; fi
+before_script:
+  - cp sample.env .env
+script: make test
+before_deploy:
+  - rm -rf .env
+  - git update-index --assume-unchanged setup.py
 deploy:
   - provider: pypi
     user: titan_550
