@@ -68,10 +68,8 @@ class FlatFile(DataObject):
             except OSError:
                 pass
         if not self.columns:
-            if self.path:
-                self._read_columns_from_file()
-            else:
-                raise Exception('Need the object columns or path to build the format file')
+            raise Exception(
+                'Need the object columns or path to build the format file')
         self.__format_file_path = self._build_format_file()
         return self.__format_file_path
 
@@ -87,6 +85,8 @@ class FlatFile(DataObject):
 
     @property
     def columns(self):
+        if not self.__columns and self.path:
+            self._read_columns_from_file()
         return self.__columns
 
     @columns.setter
