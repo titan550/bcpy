@@ -35,7 +35,6 @@ def sqlcmd(server, database, command, username=None, password=None):
     output = StringIO(result.stdout.decode('ascii'))
     first_line_output = output.readline().strip()
     if first_line_output == '':
-        print(first_line_output)
         header = None
     else:
         header = 'infer'
