@@ -15,7 +15,7 @@ def bcp(sql_table, flat_file):
         bcp_command += ['-F', '2']
     result = subprocess.run(bcp_command)
     if result.returncode:
-        raise Exception(result.stderr)
+        raise Exception(f'Bcp command failed. Details:\n{result}')
 
 
 def sqlcmd(server, database, command, username=None, password=None):
