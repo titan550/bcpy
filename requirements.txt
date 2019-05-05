@@ -1,4 +1,4 @@
 pytest
-pyodbc
 pandas
 numpy
+
