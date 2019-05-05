@@ -150,7 +150,12 @@ class DataFrame(DataObject):
         qualifier = '"'
         newline = '\n'
         self._csv_file_path = TemporaryFile.get_tmp_file()
-        self._df.to_csv(index=index, sep=delimiter, quotechar=qualifier, quoting=csv.QUOTE_ALL,
-                        line_terminator=newline, path_or_buf=self._csv_file_path)
-        self._flat_file_object = FlatFile(delimiter=',', qualifier=qualifier, newline=newline, path=self._csv_file_path)
+        self._df.to_csv(index=index, sep=delimiter, quotechar=qualifier,
+                        quoting=csv.QUOTE_ALL,
+                        line_terminator=newline,
+                        path_or_buf=self._csv_file_path)
+        self._flat_file_object = FlatFile(delimiter=',',
+                                          qualifier=qualifier,
+                                          newline=newline,
+                                          path=self._csv_file_path)
         self._flat_file_object.to_sql(sql_table)
