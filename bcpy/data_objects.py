@@ -40,8 +40,11 @@ class FlatFile(DataObject):
             self.qualifier = ''
 
     def __del__(self):
+        try:
         if self.__format_file_path:
             os.remove(self.__format_file_path)
+        except AttributeError:
+            pass
 
     def _read_columns_from_file(self):
         with open(self.path) as f:
