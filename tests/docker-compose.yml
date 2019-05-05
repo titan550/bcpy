@@ -21,7 +21,6 @@ services:
     command: ["tests/wait-for-it.sh", "mssql:1433", "--", "tests/test.sh"]
     environment:
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
-
     depends_on:
       - mssql
     networks: 
