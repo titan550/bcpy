@@ -225,6 +225,11 @@ class SqlTable(DataObject):
         """
         super().__init__(config)
         self.schema = 'dbo'
+        self.server = None
+        self.database = None
+        self.table = None
+        self.username = None
+        self.password = None
         required_args = {'server', 'database', 'table'}
         if not required_args.issubset(set(kwargs.keys()) | set(config.keys())):
             raise ValueError(
