@@ -5,9 +5,9 @@ from .binary_callers import bcp
 import csv
 
 
-class DataObject(object):
+class DataObject:
     def __init__(self, config):
-        if not isinstance(config, dict):
+        if config and not isinstance(config, dict):
             raise TypeError('Config parameter must be a dictionary object')
 
     def __repr__(self):
