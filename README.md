@@ -93,6 +93,7 @@ bdf.to_sql(sql_table)
 
 You need a working version of Microsoft bcp installed in your system. Your PATH environment variable should contain the directory of the bcp utility. Following are the installation tutorials for different operating systems.
 
-- [Install bcp on Linux](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools)
-- [Install bcp on Mac](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools?view=sql-server-2017#macos)
-- [Install bcp on Windows](https://docs.microsoft.com/en-us/sql/tools/bcp-utility)
+- [Dockerfile (Ubuntu 18.04)](./bcp.Dockerfile)
+- [Linux](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools)
+- [Mac](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup-tools?view=sql-server-2017#macos)
+- [Windows](https://docs.microsoft.com/en-us/sql/tools/bcp-utility)
