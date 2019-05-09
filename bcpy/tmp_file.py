@@ -6,6 +6,8 @@ import tempfile
 
 
 class TemporaryFile:
+    tmp_dir = None
+
     def __init__(self, mode='w'):
         self._file_path = self.get_tmp_file()
         self._tmp_file = open(self._file_path, mode)
@@ -16,13 +18,15 @@ class TemporaryFile:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._tmp_file.close()
 
-    @staticmethod
-    def _get_tmp_dir():
+    @classmethod
+    def _get_tmp_dir(cls):
         """
         :return: The optimum temporary directory based on OS and environment
         :rtype: str
         """
-        if sys.platform == 'linux':
+        if cls.tmp_dir:
+            tmp_dir = cls.tmp_dir
+        elif sys.platform == 'linux':
             try:
                 tmp_dir = os.environ['XDG_RUNTIME_DIR']
             except KeyError:
