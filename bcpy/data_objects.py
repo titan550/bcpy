@@ -271,14 +271,7 @@ class DataFrame(DataObject):
         """
         super().__init__(dict())
         self._df = df
-        self._csv_file_path = None
         self._flat_file_object = None
-
-    def __del__(self):
-        """Removes the intermediary CSV file that gets created before sending
-        the object to SQL Server"""
-        if self._csv_file_path:
-            os.remove(self._csv_file_path)
 
     def to_sql(self, sql_table, index=False):
         """Sends the object to SQL Server.
@@ -291,13 +284,16 @@ class DataFrame(DataObject):
         delimiter = ','
         qualifier = '"'
         newline = '\n'
-        self._csv_file_path = TemporaryFile.get_tmp_file()
+        csv_file_path = TemporaryFile.get_tmp_file()
         self._df.to_csv(index=index, sep=delimiter, quotechar=qualifier,
                         quoting=csv.QUOTE_ALL,
                         line_terminator=newline,
-                        path_or_buf=self._csv_file_path)
+                        path_or_buf=csv_file_path)
         self._flat_file_object = FlatFile(delimiter=',',
                                           qualifier=qualifier,
                                           newline=newline,
-                                          path=self._csv_file_path)
+                                          path=csv_file_path)
+        try:
         self._flat_file_object.to_sql(sql_table)
+        finally:
+            os.remove(csv_file_path)
