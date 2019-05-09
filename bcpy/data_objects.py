@@ -233,16 +233,19 @@ class SqlTable(DataObject):
         self.table = None
         self.username = None
         self.password = None
-        required_args = {'server', 'database', 'table'}
-        if not required_args.issubset(set(kwargs.keys()) | set(config.keys())):
-            raise ValueError(
-                f'Missing arguments in kwargs and config. '
-                f'Need {required_args}')
+        input_args = set()
         if config:
             for key, value in config.items():
                 setattr(self, key, value)
+                input_args.add(key)
         for key, value in kwargs.items():
             setattr(self, key, value)
+            input_args.add(key)
+        required_args = {'server', 'database', 'table'}
+        if not required_args.issubset(input_args):
+            raise ValueError(
+                f'Missing arguments in kwargs and config. '
+                f'Need {required_args}')
 
     @property
     def with_krb_auth(self):
