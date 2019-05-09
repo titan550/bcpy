@@ -55,7 +55,6 @@ sql_config = {
     'server': 'sql_server_hostname',
     'database': 'database_name',
     'username': 'test_user',
-    'table': 'test_table',
     'password': 'test_user_password1234'
 }
 sql_table_name = 'test_data1'
