@@ -47,7 +47,7 @@ def sqlcmd(server, database, command, username=None, password=None):
     :rtype: Pandas.DataFrame
     """
     if not username or not password:
-        auth = ['-T']
+        auth = ['-E']
     else:
         auth = ['-U', username, '-P', password]
     command = 'set nocount on;' + command
