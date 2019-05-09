@@ -5,7 +5,7 @@ import sys
 import tempfile
 
 
-class TemporaryFile(object):
+class TemporaryFile:
     def __init__(self, mode='w'):
         self._file_path = self.get_tmp_file()
         self._tmp_file = open(self._file_path, mode)

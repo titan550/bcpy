@@ -1,4 +1,4 @@
-class FormatFile(object):
+class FormatFile:
     @classmethod
     def _get_field_terminators(cls, flat_file):
         """Returns the field terminators that a bcp format file requires
@@ -28,7 +28,7 @@ class FormatFile(object):
         :type input_string: str
         :return: Scaped string
         """
-        scaped_string = input_string.replace('"', '\\"').replace("'", "\\'")\
+        scaped_string = input_string.replace('"', '\\"').replace("'", "\\'") \
             .replace('\r', '\\r').replace('\n', '\\n')
         return scaped_string
 
