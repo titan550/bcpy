@@ -72,7 +72,7 @@ class FlatFile(DataObject):
 
         Note: Caller of this method assumes that the file has headers.
         """
-        with open(self.path) as f:
+        with open(self.path, encoding='utf-8-sig') as f:
             header = f.readline()
         qualifier_delimiter_combo = str.format('{0}{1}{0}', self.qualifier,
                                                self.delimiter)
