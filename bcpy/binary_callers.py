@@ -1,9 +1,9 @@
 import subprocess
-import pandas as pd
 from io import StringIO
 
+import pandas as pd
 
-def bcp(sql_table, flat_file):
+
     """Runs the bcp command to transfer the input flat file to the input
     SQL Server table.
     :param sql_table: The destination Sql Server table

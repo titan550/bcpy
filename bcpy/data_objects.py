@@ -9,6 +9,7 @@ from .tmp_file import TemporaryFile
 class DataObject:
     """Base object for data objects in bcpy
     """
+
     def __init__(self, config):
         if config and not isinstance(config, dict):
             raise TypeError('Config parameter must be a dictionary object')
@@ -259,6 +260,7 @@ class SqlTable(DataObject):
 class DataFrame(DataObject):
     """Wrapper for pandas.DataFrame objects
     """
+
     def __init__(self, df):
         """
         :param df: DataFrame object
