@@ -22,9 +22,10 @@ import pandas as pd
                    sql_table.server] + auth
     if flat_file.file_has_header_line:
         bcp_command += ['-F', '2']
-    result = subprocess.run(bcp_command)
+    result = subprocess.run(bcp_command, stderr=subprocess.PIPE)
     if result.returncode:
-        raise Exception(f'Bcp command failed. Details:\n{result}')
+        raise Exception(
+            f'Bcp command failed. Details:\n{result}')
 
 
 def sqlcmd(server, database, command, username=None, password=None):
@@ -53,7 +54,8 @@ def sqlcmd(server, database, command, username=None, password=None):
     command = 'set nocount on;' + command
     sqlcmd_command = ['sqlcmd', '-S', server, '-d', database, '-b'] + auth + \
                      ['-s,', '-W', '-Q', command]
-    result = subprocess.run(sqlcmd_command, stdout=subprocess.PIPE)
+    result = subprocess.run(sqlcmd_command, stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE)
     if result.returncode:
         print(result.stdout)
         raise Exception(f'Sqlcmd command failed. Details:\n{result}')
