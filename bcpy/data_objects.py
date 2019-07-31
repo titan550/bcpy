@@ -133,19 +133,23 @@ class FlatFile(DataObject):
             f'create table [dbo].[{table_name}] ({sql_cols});'
         return sql_command
 
-    def to_sql(self, sql_table, batch_size=10000):
+    def to_sql(self, sql_table, existing_sql_table=False, batch_size=10000):
         """Sends the object to SQL table
         :param sql_table: destination SQL table
         :type sql_table: SqlTable
+        :param existing_sql_table: If to use an existing table in the SQL database. 
+        If not, then creates a new one.
+        :type existing_sql_table: bool
         :param batch_size: Batch size (chunk size) to send to SQL Server
         :type batch_size: int
         """
-        sqlcmd(
-            server=sql_table.server,
-            database=sql_table.database,
-            command=self._get_sql_create_statement(table_name=sql_table.table),
-            username=sql_table.username,
-            password=sql_table.password)
+        if not existing_sql_table:
+            sqlcmd(
+                server=sql_table.server,
+                database=sql_table.database,
+                command=self._get_sql_create_statement(table_name=sql_table.table),
+                username=sql_table.username,
+                password=sql_table.password)
         bcp(sql_table=sql_table, flat_file=self, batch_size=batch_size)
 
     @property
@@ -275,13 +279,16 @@ class DataFrame(DataObject):
         self._df = df
         self._flat_file_object = None
 
-    def to_sql(self, sql_table, index=False, batch_size=10000):
+    def to_sql(self, sql_table, index=False, existing_sql_table=False, batch_size=10000):
         """Sends the object to SQL Server.
         :param sql_table: destination SQL Server table
         :type sql_table: SqlTable
         :param index: Specifies whether to send the index of
         the DataFrame or not
         :type index: bool
+        :param existing_sql_table: If to use an existing table in the SQL database. 
+        If not, then creates a new one.
+        :type existing_sql_table: bool
         :param batch_size: Batch size (chunk size) to send to SQL Server
         :type batch_size: int
         """
@@ -298,6 +305,6 @@ class DataFrame(DataObject):
                                           newline=newline,
                                           path=csv_file_path)
         try:
-            self._flat_file_object.to_sql(sql_table, batch_size=batch_size)
+            self._flat_file_object.to_sql(sql_table, existing_sql_table=existing_sql_table, batch_size=batch_size)
         finally:
             os.remove(csv_file_path)
