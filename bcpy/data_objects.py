@@ -196,7 +196,7 @@ class SqlServer(DataObject):
         :return: Kerberos authentication eligibility
         :rtype: bool
         """
-        if hasattr(self, 'username') and hasattr(self, 'password'):
+        if hasattr(self, 'username') and hasattr(self, 'password') and self.username and self.password:
             result = False
         else:
             result = True
@@ -259,7 +259,7 @@ class SqlTable(DataObject):
         :return: Kerberos authentication eligibility
         :rtype: bool
         """
-        if hasattr(self, 'username') and hasattr(self, 'password'):
+        if hasattr(self, 'username') and hasattr(self, 'password') and self.username and self.password:
             result = False
         else:
             result = True
