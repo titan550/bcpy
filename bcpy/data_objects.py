@@ -305,6 +305,8 @@ class DataFrame(DataObject):
                                           newline=newline,
                                           path=csv_file_path)
         try:
-            self._flat_file_object.to_sql(sql_table, use_existing_sql_table=use_existing_sql_table, batch_size=batch_size)
+            self._flat_file_object.to_sql(sql_table,
+                                          use_existing_sql_table=use_existing_sql_table,
+                                          batch_size=batch_size)
         finally:
             os.remove(csv_file_path)
