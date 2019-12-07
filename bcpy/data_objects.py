@@ -116,28 +116,32 @@ class FlatFile(DataObject):
             format_file_path = f.name
         return format_file_path
 
-    def _get_sql_create_statement(self, table_name=None):
+    def _get_sql_create_statement(self, table_name=None, schema_name='dbo'):
         """Creates a SQL drop and re-create statement corresponding to the
         columns list of the object.
 
         :param table_name: name of the new table
         :type table_name: str
+        :paran schema_name: name of schema
+        :type schema_name: str
         :return: SQL code to create the table
         """
         if not table_name:
             table_name = os.path.basename(self.path)
         sql_cols = ','.join(
             map(lambda x: f'[{x}] nvarchar(max)', self.columns))
-        sql_command = f"if object_id('[dbo].[{table_name}]', 'U') " \
-            f"is not null drop table [dbo].[{table_name}];" \
-            f'create table [dbo].[{table_name}] ({sql_cols});'
+        sql_command = f"if object_id('[{schema_name}].[{table_name}]', 'U') " \
+            f"is not null drop table [{schema_name}].[{table_name}];" \
+            f'create table [{schema_name}].[{table_name}] ({sql_cols});'
         return sql_command
 
-    def to_sql(self, sql_table, use_existing_sql_table=False, batch_size=10000):
+    def to_sql(self, sql_table, use_existing_sql_table=False,
+               batch_size=10000):
         """Sends the object to SQL table
         :param sql_table: destination SQL table
         :type sql_table: SqlTable
-        :param use_existing_sql_table: If to use an existing table in the SQL database. 
+        :param use_existing_sql_table: If to
+            use an existing table in the SQL database.
         If not, then creates a new one.
         :type use_existing_sql_table: bool
         :param batch_size: Batch size (chunk size) to send to SQL Server
@@ -147,7 +151,10 @@ class FlatFile(DataObject):
             sqlcmd(
                 server=sql_table.server,
                 database=sql_table.database,
-                command=self._get_sql_create_statement(table_name=sql_table.table),
+                command=self._get_sql_create_statement(
+                    table_name=sql_table.table,
+                    schema_name=sql_table.schema
+                ),
                 username=sql_table.username,
                 password=sql_table.password)
         bcp(sql_table=sql_table, flat_file=self, batch_size=batch_size)
@@ -196,7 +203,10 @@ class SqlServer(DataObject):
         :return: Kerberos authentication eligibility
         :rtype: bool
         """
-        if hasattr(self, 'username') and hasattr(self, 'password') and self.username and self.password:
+        if hasattr(self, 'username') and \
+                hasattr(self, 'password') and \
+                self.username and \
+                self.password:
             result = False
         else:
             result = True
@@ -220,7 +230,7 @@ class SqlServer(DataObject):
 
 
 class SqlTable(DataObject):
-    def __init__(self, config=None, **kwargs):
+    def __init__(self, config=None, schema_name='dbo', **kwargs):
         """Leave the username and password to None to use Kerberos
         integrated authentication
         :param config: A dictionary object with the parameters.
@@ -229,11 +239,13 @@ class SqlTable(DataObject):
         :param database: default database to use for operations
         :param server: server name
         :param table: name of the SQL Server table
+        :paran schema_name: name of schema
+        :type schema_name: str
         :param username: username for SQL login (default: None)
         :param password: password for SQL login (default: None)
         """
         super().__init__(config)
-        self.schema = 'dbo'
+        self.schema = schema_name
         self.server = None
         self.database = None
         self.table = None
@@ -259,7 +271,10 @@ class SqlTable(DataObject):
         :return: Kerberos authentication eligibility
         :rtype: bool
         """
-        if hasattr(self, 'username') and hasattr(self, 'password') and self.username and self.password:
+        if (hasattr(self, 'username')
+            and hasattr(self, 'password')
+            and self.username
+                and self.password):
             result = False
         else:
             result = True
@@ -279,14 +294,15 @@ class DataFrame(DataObject):
         self._df = df
         self._flat_file_object = None
 
-    def to_sql(self, sql_table, index=False, use_existing_sql_table=False, batch_size=10000):
+    def to_sql(self, sql_table, index=False, use_existing_sql_table=False,
+               batch_size=10000):
         """Sends the object to SQL Server.
         :param sql_table: destination SQL Server table
         :type sql_table: SqlTable
         :param index: Specifies whether to send the index of
         the DataFrame or not
         :type index: bool
-        :param use_existing_sql_table: If to use an existing table in the SQL database. 
+        :param use_existing_sql_table: True to use an existing table.
         If not, then creates a new one.
         :type use_existing_sql_table: bool
         :param batch_size: Batch size (chunk size) to send to SQL Server
@@ -296,17 +312,22 @@ class DataFrame(DataObject):
         qualifier = '"'
         newline = '\n'
         csv_file_path = TemporaryFile.get_tmp_file()
-        self._df.to_csv(index=index, sep=delimiter, quotechar=qualifier,
-                        quoting=csv.QUOTE_ALL,
-                        line_terminator=newline,
-                        path_or_buf=csv_file_path)
-        self._flat_file_object = FlatFile(delimiter=',',
-                                          qualifier=qualifier,
-                                          newline=newline,
-                                          path=csv_file_path)
+        self._df.to_csv(
+            index=index,
+            sep=delimiter,
+            quotechar=qualifier,
+            quoting=csv.QUOTE_ALL,
+            line_terminator=newline,
+            path_or_buf=csv_file_path)
+        self._flat_file_object = FlatFile(
+            delimiter=',',
+            qualifier=qualifier,
+            newline=newline,
+            path=csv_file_path)
         try:
-            self._flat_file_object.to_sql(sql_table,
-                                          use_existing_sql_table=use_existing_sql_table,
-                                          batch_size=batch_size)
+            self._flat_file_object.to_sql(
+                sql_table,
+                use_existing_sql_table=use_existing_sql_table,
+                batch_size=batch_size)
         finally:
             os.remove(csv_file_path)
