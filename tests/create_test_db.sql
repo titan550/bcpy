@@ -5,3 +5,7 @@ DROP DATABASE bcpy;
 GO
 CREATE DATABASE bcpy;
 GO
+USE bcpy;
+GO
+CREATE SCHEMA [my_test_schema] AUTHORIZATION dbo; 
+GO
