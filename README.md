@@ -33,7 +33,8 @@ This package is a wrapper for Microsoft's SQL Server bcp utility. Current databa
 
 ## How Can I Install It?
 
-You can download and install this package from PyPI repository by running the command below.
+1. Make sure your computeer has the [requirements](#requirements).
+1. You can download and install this package from PyPI repository by running the command below.
 
 ```bash
 pip install bcpy
