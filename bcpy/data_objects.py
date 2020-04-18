@@ -33,7 +33,7 @@ class FlatFile(DataObject):
         :param delimiter: flat file delimiter (default: ",")
         :param qualifier: flat file qualifier
                           (default: "'" , e.g., 'col1','col2')
-
+        :param utf8: set to true for utf-8 (default: False)
         :param newline: newline characters that separate records
                         (default: "\n")
         :param path: path to the flat file
@@ -49,6 +49,7 @@ class FlatFile(DataObject):
         self.path = None
         self.__format_file_path = None
         self.file_has_header_line = False
+        self.utf8 = False
         if config:
             for key, value in config.items():
                 setattr(self, key, value)
@@ -157,7 +158,8 @@ class FlatFile(DataObject):
                 ),
                 username=sql_table.username,
                 password=sql_table.password)
-        bcp(sql_table=sql_table, flat_file=self, batch_size=batch_size)
+        bcp(sql_table=sql_table, flat_file=self,
+            batch_size=batch_size, utf8=self.utf8)
 
     @property
     def columns(self):
@@ -295,7 +297,7 @@ class DataFrame(DataObject):
         self._flat_file_object = None
 
     def to_sql(self, sql_table, index=False, use_existing_sql_table=False,
-               batch_size=10000):
+               batch_size=10000, utf8=False):
         """Sends the object to SQL Server.
         :param sql_table: destination SQL Server table
         :type sql_table: SqlTable
@@ -307,6 +309,8 @@ class DataFrame(DataObject):
         :type use_existing_sql_table: bool
         :param batch_size: Batch size (chunk size) to send to SQL Server
         :type batch_size: int
+        :param utf8: set to True for utf-8 (default: False)
+        :type utf8: bool
         """
         delimiter = ','
         qualifier = '"'
@@ -323,7 +327,8 @@ class DataFrame(DataObject):
             delimiter=',',
             qualifier=qualifier,
             newline=newline,
-            path=csv_file_path)
+            path=csv_file_path,
+            utf8=utf8)
         try:
             self._flat_file_object.to_sql(
                 sql_table,

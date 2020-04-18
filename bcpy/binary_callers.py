@@ -4,7 +4,7 @@ from io import StringIO
 import pandas as pd
 
 
-def bcp(sql_table, flat_file, batch_size):
+def bcp(sql_table, flat_file, batch_size, utf8=False):
     """Runs the bcp command to transfer the input flat file to the input
     SQL Server table.
     :param sql_table: The destination Sql Server table
@@ -13,6 +13,8 @@ def bcp(sql_table, flat_file, batch_size):
     :type flat_file: FlatFile
     :param batch_size: Batch size (chunk size) to send to SQL Server
     :type batch_size: int
+    :param utf8: set to True for utf8 (default = False)
+    :type utf8: bool
     """
     if sql_table.with_krb_auth:
         auth = ['-T']
@@ -25,6 +27,8 @@ def bcp(sql_table, flat_file, batch_size):
                    sql_table.server, '-b', str(batch_size)] + auth
     if flat_file.file_has_header_line:
         bcp_command += ['-F', '2']
+    if utf8:
+        bcp_command += ['-c', '-C65001']
     result = subprocess.run(bcp_command, stderr=subprocess.PIPE)
     if result.returncode:
         raise Exception(

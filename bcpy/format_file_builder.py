@@ -40,6 +40,10 @@ class FormatFile:
         :return: String value of the format file
         :rtype: str
         """
+        if data_object.utf8:
+            collation = ''
+        else:
+            collation = 'SQL_Latin1_General_CP1_CI_AS'
         if data_object.qualifier:
             format_file_row_count = len(data_object.columns) + 1
         else:
@@ -48,7 +52,7 @@ class FormatFile:
         terminators = cls._get_field_terminators(data_object)
         if data_object.qualifier:
             format_file += f'1 SQLCHAR 0 0 "{terminators[0]}" 0 ' \
-                f'ignored_line_start_qualifier SQL_Latin1_General_CP1_CI_AS\n'
+                f'ignored_line_start_qualifier {collation}\n'
             format_file_row_index = 2
             terminators = terminators[1:]
         else:
@@ -57,6 +61,6 @@ class FormatFile:
             format_file += f'{format_file_row_index} SQLCHAR 0 0 ' \
                 f'"{terminator}" {column_index} ' \
                 f'{data_object.columns[column_index - 1]} ' \
-                f'SQL_Latin1_General_CP1_CI_AS\n'
+                f'{collation}\n'
             format_file_row_index += 1
         return format_file
