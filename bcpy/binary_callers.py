@@ -1,7 +1,19 @@
 import subprocess
 from io import StringIO
+import hashlib
 
 import pandas as pd
+
+
+def sha512(text, encoding='utf-8'):
+    """Converts an input string to its sha512 hash
+    """
+    if not isinstance(text, bytes):
+        if isinstance(text, str):
+            text = text.encode(encoding)
+        else:
+            raise ValueError('Invalid input. Cannot compute hash.')
+    return hashlib.sha512(text).hexdigest()
 
 
 def bcp(sql_table, flat_file, batch_size):
@@ -20,9 +32,19 @@ def bcp(sql_table, flat_file, batch_size):
         auth = ['-U', sql_table.username, '-P', sql_table.password]
     full_table_string = \
         f'{sql_table.database}.{sql_table.schema}.{sql_table.table}'
-    bcp_command = ['bcp', full_table_string, 'IN', flat_file.path, '-f',
-                   flat_file.get_format_file_path(), '-S',
-                   sql_table.server, '-b', str(batch_size)] + auth
+    try:
+        bcp_command = ['bcp', full_table_string, 'IN', flat_file.path, '-f',
+                       flat_file.get_format_file_path(), '-S',
+                       sql_table.server, '-b', str(batch_size)] + auth
+    except Exception as e:
+        args_clean = list()
+        for arg in e.args:
+            if isinstance(arg, str):
+                arg = arg.replace(sql_table.password,
+                                  sha512(sql_table.password))
+            args_clean.append(arg)
+        e.args = tuple(args_clean)
+        raise e
     if flat_file.file_has_header_line:
         bcp_command += ['-F', '2']
     result = subprocess.run(bcp_command, stderr=subprocess.PIPE)
@@ -60,8 +82,8 @@ def sqlcmd(server, database, command, username=None, password=None):
     result = subprocess.run(sqlcmd_command, stdout=subprocess.PIPE,
                             stderr=subprocess.PIPE)
     if result.returncode:
-        print(result.stdout)
-        raise Exception(f'Sqlcmd command failed. Details:\n{result}')
+        result_dump = str(result).replace(password, sha512(password))
+        raise Exception(f'Sqlcmd command failed. Details:\n{result_dump}')
     output = StringIO(result.stdout.decode('ascii'))
     first_line_output = output.readline().strip()
     if first_line_output == '':
