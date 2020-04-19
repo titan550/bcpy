@@ -36,13 +36,16 @@ RUN apt-get update && apt-get install -y vim dnsutils \
 	&& pip install ipython \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir /bcpy
+ARG USER=bcpyer
+RUN groupadd -r --gid 1000 ${USER} \
+    && useradd --create-home --uid 1000 ${USER} -r -g ${USER}
 
+USER ${USER}
+ENV PATH="/home/${USER}/.local/bin:${PATH}"
+
+COPY --chown=1000:1000 ./requirements.txt /bcpy/requirements.txt
+RUN pip install -r /bcpy/requirements.txt
+
+COPY --chown=1000:1000 ./ /bcpy/
 WORKDIR /bcpy
-
-COPY ./requirements.txt ./requirements.txt
-RUN pip install -r requirements.txt
-
-COPY ./ ./
-
 RUN pip install -e .
