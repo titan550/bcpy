@@ -184,6 +184,7 @@ class SqlServer(DataObject):
         :param server: server name
         :param username: username for SQL login (default: None)
         :param password: password for SQL login (default: None)
+        :param trusted_connection: use SQL trusted connection (default: False)
         """
         # todo: make Sql Server one of the attributes of SqlTable
         super().__init__(config)
@@ -191,6 +192,7 @@ class SqlServer(DataObject):
         self.server = 'localhost'
         self.username = None
         self.password = None
+        self.trusted_connection = False
         if config:
             for key, value in config.items():
                 setattr(self, key, value)
@@ -226,7 +228,8 @@ class SqlServer(DataObject):
             database=self.database,
             command=command,
             username=self.username,
-            password=self.password)
+            password=self.password,
+            trusted_connection=self.trusted_connection)
 
 
 class SqlTable(DataObject):
