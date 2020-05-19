@@ -53,7 +53,7 @@ def bcp(sql_table, flat_file, batch_size):
             f'Bcp command failed. Details:\n{result}')
 
 
-def sqlcmd(server, database, command, username=None, password=None):
+def sqlcmd(server, database, command, username=None, password=None, trusted_connection=False):
     """Runs the input command against the database and returns the output if it
      is a table.
     Leave username and password to None if you intend to use
@@ -68,12 +68,17 @@ def sqlcmd(server, database, command, username=None, password=None):
     :type username: str
     :param password: Password to use for login
     :type password: str
+    :param trusted_connection: Use trusted connection
+    :type trusted_connection: bool   
     :return: Returns a table if the command has an output. Returns None
              if the output does not return anything.
     :rtype: Pandas.DataFrame
     """
     if not username or not password:
-        auth = ['-E']
+        if trusted_connection:
+            auth = ['-T']
+        else:
+            auth = ['-E']
     else:
         auth = ['-U', username, '-P', password]
     command = 'set nocount on;' + command
