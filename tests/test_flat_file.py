@@ -11,7 +11,7 @@ def test_flat_file_to_sql():
         'password': os.environ['MSSQL_SA_PASSWORD']
     }
     sql_table_name = 'test_data1'
-    schema = 'my_test_schema'
+    schema = 'dbo'
     csv_file_path = 'tests/data1.csv'
     c = bcpy.FlatFile(qualifier='', path=csv_file_path)
     sql_table = bcpy.SqlTable(
