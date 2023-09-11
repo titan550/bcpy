@@ -317,7 +317,7 @@ class DataFrame(DataObject):
             sep=delimiter,
             quotechar=qualifier,
             quoting=csv.QUOTE_ALL,
-            line_terminator=newline,
+            lineterminator=newline,
             path_or_buf=csv_file_path)
         self._flat_file_object = FlatFile(
             delimiter=',',
